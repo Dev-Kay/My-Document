@@ -1,4 +1,4 @@
 # JAVA Docuemnt
 
 ### :book: Contents
-1. [함수형 Interface (Functional Interface)]()
+1. [함수형 Interface (Functional Interface)](./contents/Funcional-interface.md)

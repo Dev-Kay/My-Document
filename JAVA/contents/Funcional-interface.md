@@ -72,3 +72,5 @@ BinaryOperator<Integer> binaryOperator = (num1, num2) -> num1 + num2;
 int nResult = binaryOperator.apply(1, 2);
 System.out.println(nResult); // 3
 ```
+
+> :arrow_double_up:[Top](#함수형-인터페이스-(Functional-Interface))    :leftwards_arrow_with_hook:[Back](https://github.com/Dev-Kay/My-Document/tree/main/JAVA)    :information_source:[Home](https://github.com/Dev-Kay/My-Document)

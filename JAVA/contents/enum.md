@@ -222,3 +222,5 @@ public class Controller {
 3. 내용등의 추가 변경시 Enum내에서만 작업을 하면 되어, 리팩토링시 범위가 적다.
 4. Type safe한 로직을 작성 할 수 있어 유지보수나 가독성에 이점..
 5. 상수와 관련 로직을 한곳에서 관리 가능.
+
+> :arrow_double_up:[Top](#정의)    :leftwards_arrow_with_hook:[Back](https://github.com/Dev-Kay/My-Document/tree/main/JAVA)    :information_source:[Home](https://github.com/Dev-Kay/My-Document)

@@ -1,9 +1,9 @@
 # JAVA Docuemnt
 
 ## :book: Contents
-1. [함수형 Interface (Functional Interface)](#함수형-Interface-(Functional-Interface))
+1. [함수형 Interface (Functional Interface)](#함수형-Interface-Functional-Interface)
 2. [Enum의 활용](#Enum의-활용)
-3. [Interface default/static method (~8)](#Interface-default/static-method-(~8))
+3. [Interface default/static method (~8)](#Interface-defaultstatic-method-8)
 
 
 

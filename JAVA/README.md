@@ -51,3 +51,5 @@
   - 8 이전에는 인터페이스에서 추상 메서드를 정의하고 클래스에서 추상 메서드를 구현
 - static method
   - interface내 static method의 구현이 가능 해지며 간단한 유틸리티성 인터페이스를 만들 수 있게 되었다.
+
+:raised_hands:[top](#JAVA-Docuemnt)

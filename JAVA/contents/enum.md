@@ -323,9 +323,9 @@ public class VendingMachine {
     public static void main(String[] args) {
         CoinMachine coinMachine = new CoinMachine();
         
-        Coin addCoin = MonetaryUnit
+        Coin addCoin = Coin
                 .findByPrice(CountryCoins.valueOf(args[0]).getCoins(), new BigDecimal(args[1]));
-        coinMachine.add(MonetaryUnit);
+        coinMachine.add(Coin );
     }
 }
 ```

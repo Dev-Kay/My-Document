@@ -49,7 +49,7 @@ public class CalculatorImpl implements Calculator {
 }
 ```
 
-- 왜 나왔을까??
+- 왜 나왔을까??   
     단편적으로 생각해 보면... 오랜기간 interface들이 추가되다보니 하위호환성과 유연성이 아닐까 한다.   
     결국 오래된 시스템일 수록 interface의 항목과 유지보수 상 변경 점이 있을 수 밖에 없는 상황이 올것이고,   
     그때 마다 전체를 다 변경 시킨다던가 deprecated된 method의 처리라던가 등등 이런 문제 점에 좀 더 유연히 대처하기 위해 나오지 않았나 한다.
@@ -89,6 +89,6 @@ public class VendingMachine {
 }
 ```
 
-- 왜 나왔을까??
+- 왜 나왔을까??   
     유틸리티 메서드의 활용이 아니려나 싶다.. 
     오버라이드는 되지 않음!

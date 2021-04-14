@@ -167,7 +167,171 @@ public enum Calculator {
 ```
 > 하고 보니 더 길어지긴 했는데... 간단한 프로그램이라 그렇고...   
 
-### 개인적인 코드 리팩토링 사례
+### interface 상속을 통한 다형성
+> enum은 java.lang.Enum 클래스를 기본적으로 상속받고 있기 때문에 이중상속이 안되는 JAVA 특성상 class나 enum끼리의 상속은 안됨   
+> interface만 상속 가능함.
+
+자판기를 예로 들어보자 메인 머신은 그대로고 동전주입기를 다른국가의 화폐로 변경이 가능하다.
+대충 이런 자판기 메인 머신을 만든다는 가정하에 머신은 변경이 없이 주입기 교체만으로 모든게 정상적으로 서비스가 되어야 한다.   
+막 생각나는데로 프로그램을 짜보자면~~~
+
+```java
+public enum KrwCoin {
+    TEN(new BigDecimal(10)),
+    FIFTY(new BigDecimal(50)),
+    ONE_HUNDRED(new BigDecimal(100)),
+    FIVE_HUNDRED(new BigDecimal(500))
+    ;
+
+    BigDecimal unit;
+    KrwCoin(BigDecimal unit) { this.unit = unit; }
+    public BigDecimal getUnit() { return this.unit; }
+    public static KrwCoin findByPrice(BigDecimal price) {
+        return Arrays.stream(values())
+                .filter(v -> v.unit.equals(price))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+}
+
+public enum UsdCoin {
+    PENNY(new BigDecimal("0.01")),
+    NICKEL(new BigDecimal("0.05")),
+    DIME(new BigDecimal("0.1")),
+    QUARTER(new BigDecimal("0.25")),
+    HALF(new BigDecimal("0.5")),
+    DOLLAR(new BigDecimal("1"))
+    ;
+
+    BigDecimal unit;
+    UsdCoin(BigDecimal unit) { this.unit = unit; }
+    public BigDecimal getUnit() { return this.unit; }
+    public static UsdCoin findByPrice(BigDecimal price) {
+        return Arrays.stream(values())
+                .filter(v -> v.unit.equals(price))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+}
+
+public class CoinMachine {
+    BigDecimal currentInsert = new BigDecimal(0.00);
+
+    public BigDecimal add(BigDecimal coin) {
+        return currentInsert.add(coin);
+    }
+}
+
+public class VendingMachine {
+    // args[0] : 통화, args[1] : 입금금액
+    public static void main(String[] args) {
+        CoinMachine coinMachine = new CoinMachine();
+        
+        switch (args[0]) {
+            case "KRW":
+                coinMachine.add(KrwCoin.findByPrice(new BigDecimal(args[1])));
+                break;
+            case "USD":
+                coinMachine.add(UsdCoin.findByPrice(new BigDecimal(args[1])));
+                break;
+        }
+        
+        
+    }
+}
+```
+
+뭐 대충 이런식일 것이다 (예제로 설명을 위해 대충 만들어서 컴파일도 안해본 소스이기에 개념 잡는 정도로만 봐줬으면 좋겠습니다....)
+interface 상속을 하여 리팩토링을 하게 되면
+
+```java
+public interface Coin {
+    public BigDecimal getUnit();
+    
+    public static Coin findByPrice(Class<? extends Coin> e, BigDecimal price) {
+        return Arrays.stream(e.getEnumConstants())
+                .filter(v -> v.getUnit().equals(price))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+}
+
+public enum CountryCoins {
+    KRW(KrwCoin.class),
+    USD(UsdCoin.class),
+    ;
+
+    Class<? extends Coin> coins;
+
+    Currencies1(Class<? extends Coin> coins) {
+        this.coins = coins;
+    }
+
+    public Class<? extends Coin> getCoins() {
+        return coins;
+    }
+}
+
+public enum KrwCoin implements Coin {
+    TEN(new BigDecimal(10)),
+    FIFTY(new BigDecimal(50)),
+    ONE_HUNDRED(new BigDecimal(100)),
+    FIVE_HUNDRED(new BigDecimal(500));
+
+    BigDecimal unit;
+    
+    KrwCoin(BigDecimal unit) {
+        this.unit = unit;
+    }
+    
+    @Override
+    public BigDecimal getUnit() {
+        return this.unit;
+    }
+}
+
+public enum UsdCoin implements Coin {
+    PENNY(new BigDecimal("0.01")),
+    NICKEL(new BigDecimal("0.05")),
+    DIME(new BigDecimal("0.1")),
+    QUARTER(new BigDecimal("0.25")),
+    HALF(new BigDecimal("0.5")),
+    DOLLAR(new BigDecimal("1"));
+
+    BigDecimal unit;
+
+    UsdCoin(BigDecimal unit) {
+        this.unit = unit;
+    }
+
+    @Override
+    public BigDecimal getUnit() {
+        return this.unit;
+    }
+}
+
+public class CoinMachine {
+    BigDecimal currentInsert = new BigDecimal(0.00);
+
+    public BigDecimal add(Coin coin) {
+        return currentInsert.add(coin.getUnit());
+    }
+}
+
+public class VendingMachine {
+    // args[0] : 통화, args[1] : 입금금액
+    public static void main(String[] args) {
+        CoinMachine coinMachine = new CoinMachine();
+        
+        Coin addCoin = MonetaryUnit
+                .findByPrice(CountryCoins.valueOf(args[0]).getCoins(), new BigDecimal(args[1]));
+        coinMachine.add(MonetaryUnit);
+    }
+}
+```
+취급 가능한 통화가 늘어날때마다 메인은 변경이 없이 enum만 작업 하여 처리가 가능해 진다.   
+
+### 그외 적용 사례들
 하나의 interface를 상속받는 세개의 서비스가 있다고 가정 하고 각각의 서비스들은 요청된 parameter에 따라 분기하여 처리 해야 한다고 하자.
 ```java
 public class Controller {
@@ -208,19 +372,17 @@ public class Controller {
     }
 }
 ```
-코드가 한결 깔끔해진다. 
-
-> enum은 java.lang.Enum 클래스를 기본적으로 상속받고 있기 때문에 이중상속이 안되는 JAVA 특성상 class나 enum끼리의 상속은 안됨   
-> interface만 상속 가능함.
-
-이외에도 interface를 상속하여 범용성을 갖춘 열거형 상수로서의 활용이나, enum을 연계하여 좀 더 다양하게 활용 할 수 있다.
+코드가 한결 깔끔해진다.   
 
 
 **Enum을 사용했을 시 장점을 들자면**
-1. 연산에 대해 명확한 상수명을 가지고 상태와 로직을 모두 enum에서 관리 하고 소스의 가독성 또한 좋아짐
+1. 연산에 대해 명확한 상수명을 가지고 상태와 로직을 모두 enum에서 관리 하고 소스의 가독성 또한 좋아진다.
 2. 연산자를 추가시 별도의 가이드나 공유가 없더라도, IDE에서 즉각 지원하기에 알기 쉽다.
 3. 내용등의 추가 변경시 Enum내에서만 작업을 하면 되어, 리팩토링시 범위가 적다.
 4. Type safe한 로직을 작성 할 수 있어 유지보수나 가독성에 이점..
 5. 상수와 관련 로직을 한곳에서 관리 가능.
+6. enum이 public static final 이라는 점은 Singleton과 유사한 특성을 지니고 있다.   
+   따라서 중복 생성이 안되면서도 일반 클래스 기능을 할 수도 있고, 필요한 때에는 enum의 특성을 활용할 수도 있다.   
+   이런 특성 때문에 Singleton 패턴, Abstract Factory 패턴, Factory Method 패턴, State 패턴, Strategy 패턴, Visitor 등 다양한 패턴을 enum으로 구현이 가능하다.
 
 > :arrow_double_up:[Top](#정의)    :leftwards_arrow_with_hook:[Back](https://github.com/Dev-Kay/My-Document/tree/main/JAVA)    :information_source:[Home](https://github.com/Dev-Kay/My-Document)

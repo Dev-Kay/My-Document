@@ -12,7 +12,7 @@
     - 별로 설득력은 없다. 위에서 말했듯이 내가 봤던 legacy는 전부 Service interface 와 implements가 1:1의 구조였다.
 2. **AOP 구현시 사용하고자***
     - 그나마 이게 좀 설득력이 있겠더라
-    AOP는 별도로 정리 하겠지만 간단히 말하자면 JDK Proxy를 이용하여 메서드나 클래스에서 반복적으로 전,후등등 일어나는 일들을 모듈화 하여 대신 처리해주는 용도라고 하겠다.   
+    AOP는 별도로 정리 하겠지만 간단히 말하자면 Proxy를 이용하여 메서드나 클래스에서 반복적으로 전,후등등 일어나는 일들을 모듈화 하여 대신 처리해주는 용도라고 하겠다.   
     결국 Proxy를 사용하기 위해서 인데 Proxy는 `JDK Proxy`와 `CGLib Proxy`가 있고 `JDK Proxy`는 interface 기반 `CGLib Proxy`는 클래스에서 동작한다.   
     Spring3 버전 이전에는 CGLib를 설치를 해야 했지만 이후로는 Sprig core에 패키징 되어있다.   
     결론적으로 이 관점에서도 굳이 안써도 된다. 심지어 CGLib Proxy가 더 빠르다.

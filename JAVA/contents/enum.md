@@ -263,7 +263,7 @@ public enum CountryCoins {
 
     Class<? extends Coin> coins;
 
-    Currencies1(Class<? extends Coin> coins) {
+    CountryCoins(Class<? extends Coin> coins) {
         this.coins = coins;
     }
 

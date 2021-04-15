@@ -60,7 +60,7 @@
   Ex) 동전투입기(CLOSE) - 제조사A 달러투입, 제조사B 원화투입기 ..... (확장 및 변경 가능 = OPEN)
 - LSP(Liskov Substitution Principle) : 리스코프 치환 원칙   
   `상위 타입의 객체를 하위 타입의 객체로 치환해도 상위 타입을 사용하는 프로그램은 정상적으로 동작해야 한다.`   
-  Ex) List l = ArrayList(); l.add(d); ==> List l = LinkedArrayList(); l.add(d) // 정상적으로 구동됨   
+  Ex) List l = ArrayList(); l.add(d); ==> List l = LinkedArrayList(); l.add(d) // 구현된 클래스를 변경해도 정상적으로 구동됨   
 - ISP(Interface Segregation Principle) : 인터페이스 분리 원칙   
   `하나의 인터페이스에서 모든것을 처리 하기 보다, 사용하는 클라이언트를 기준으로 분리해야 한다.`   
   Ex) 자판기는 동전투입, 상품선택, 거스름돈 반환의 동작이 있지만 모든 작업을 한번에 수행 하지 않는다. 하여 클라이언트 즉 사용자의 행위를 기준으로 동전 투입▪상품 선택▪거스름돈 반환 interface  를 각각 상속받아 구현하고 클라이언트는 분리된 interface를 호출 하도록 한다.
